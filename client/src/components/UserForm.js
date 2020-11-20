@@ -17,7 +17,7 @@ const UserForm = () => {
             last_name,
             username,
             email,
-            password
+            pass_hash
         })
             .then(res => {
                 console.log(res.data);
@@ -49,6 +49,11 @@ const UserForm = () => {
                         <label for="email">Email:</label>
                         {errs.email ? <span className="text-danger small">{errs.email.message}</span> : null}
                         <input type="text" name="email" onChange= { e => setEmail(e.target.value)} value={email} className="form-control"/>
+                    </div>
+                    <div className="form-group">
+                        <label for="username">Username:</label>
+                        {errs.username ? <span className="text-danger small">{errs.username.message}</span> : null}
+                        <input type="text" name="username" onChange= { e => setUsername(e.target.value)} value={username} className="form-control"/>
                     </div>
                     <div className="form-group">
                         <label for="password">Password:</label>
