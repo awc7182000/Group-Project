@@ -10,7 +10,11 @@ module.exports = app => {
 
   app.get("/api/photos/", PhotoController.findAllPhotos);
   app.get("/api/photos/:id", PhotoController.findOneSinglePhoto);
-  app.put("/api/photos/update/:id", PhotoController.updateExistingPhoto);
+  app.post("/api/photos/update/:id", PhotoController.updateExistingPhoto);
   app.post("/api/photos/new", PhotoController.createNewPhoto);
   app.delete("/api/photos/delete/:id", PhotoController.deleteAnExistingPhoto);
+
+  app.get("/api/photos/owner/:id",  PhotoController.findAllPhotosByOwnerID );
+  app.get("/api/photos/user/:id",  PhotoController.findAllPhotosByUserID );
+  app.get("/api/photos/gallery/:id",  PhotoController.findAllPhotosByGalleryID );
 };
