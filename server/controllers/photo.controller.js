@@ -6,8 +6,26 @@ module.exports.findAllPhotos = (req, res) => {
     .catch(err => res.json({ message: "Something went wrong", error: err }));
 };
 
+module.exports.findAllPhotosByOwnerID = (req, res) => {
+	Photo.find({ owner_id: req.params.id })
+		.then(oneSinglePhoto => res.json( oneSinglePhoto ))
+		.catch(err => res.json({ message: "Something went wrong", error: err }));
+};
+
+module.exports.findAllPhotosByUserID = (req, res) => {
+	Photo.find({ authorized_user_ids: req.params.id })
+		.then(oneSinglePhoto => res.json( oneSinglePhoto ))
+		.catch(err => res.json({ message: "Something went wrong", error: err }));
+};
+
+module.exports.findAllPhotosByGalleryID = (req, res) => {
+	Photo.find({ _id: req.params.id })
+		.then(photos => res.json( photos ))
+		.catch(err => res.json({ message: "Something went wrong", error: err }));
+};
+
 module.exports.findOneSinglePhoto = (req, res) => {
-	Photo.findOne({ _id: req.params.id })
+	Photo.findOne({ "photo._id" : req.params.id },  "gallery_name, photo.$")
 		.then(oneSinglePhoto => res.json( oneSinglePhoto ))
 		.catch(err => res.json({ message: "Something went wrong", error: err }));
 };
@@ -19,7 +37,12 @@ module.exports.createNewPhoto = (req, res) => {
 };
 
 module.exports.updateExistingPhoto = (req, res) => {
-  Photo.findOneAndUpdate({ _id: req.params.id }, req.body, { new: true })
+  Photo.findOneAndUpdate(
+      { "photo._id" : req.params.id }, 
+      { "$set" : {
+        "photo.$": req.body
+      }}, 
+      { new: true })
     .then(updatedPhoto => res.json( updatedPhoto ))
     .catch(err => res.json({ message: "Something went wrong", error: err }));
 };
