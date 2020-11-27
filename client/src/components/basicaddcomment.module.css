@@ -13,5 +13,5 @@
     border-radius: 15px;
     padding: 10px;
     box-shadow:5px 5px 5px lightgrey;
-
+    z-index: 10;
 }

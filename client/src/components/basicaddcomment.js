@@ -18,7 +18,7 @@ const AddComment = props => {
                     user_id: user.sub,
                     x: xpct,
                     y: ypct,
-                    diam: Math.round(Math.random()*100),
+                    diam: diam,
                     comment: textvalue
                 }
             ] };
@@ -35,12 +35,12 @@ const AddComment = props => {
     
     return (
         <>
-            <Target xloc={xloc} yloc={yloc} diam={15} active={true} hidden={commentloc===null}/>
+            <Target xloc={xloc} yloc={yloc} diam={diam} active={true} hidden={commentloc===null}/>
             <div className={commentloc ?  styles.addcomment : styles.hidden } 
                 style={commentloc ? 
                     { 
                         position: "absolute",
-                        top: yloc + 25,
+                        top: yloc + diam / 2 + 10,
                         left: Math.max(xloc - 300,0)
                     } : 
                     null }

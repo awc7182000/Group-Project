@@ -20,7 +20,7 @@ const Target = props => {
             height: showdiam - 3 + "px",
             padding: "0px",
             margin: "0px"
-        }} onClick={onClickPassed}>
+        }} onClick={onClickPassed} onMouseDown={(e) => e.stopPropagation()}>
 
         </div>
     )
