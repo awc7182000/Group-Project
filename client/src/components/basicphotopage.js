@@ -1,19 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styles from './basicphotopage.module.css';
 import { useAuth0 } from '@auth0/auth0-react';
 import auth0SecureAPI from './auth0secureapi';
 import { useNavigate } from '@reach/router';
 import AddComment from './basicaddcomment';
+import Target from "./basictarget";
 
 const BasicPhotoPage = props => {
     const { user, isAuthenticated, isLoading, getAccessTokenSilently } = useAuth0();
     const { id }  = props;
     const [ photo, setPhoto ] = useState({});
     const [editMode, setEditMode ] = useState(false);
-    const [ addcommenthidden, setAddCommentHidden ] = useState(true);
+    const [ commentloc, setCommentLoc ] = useState(null);
+    const [ activecomment, setActiveComment ] = useState(null);
 
+    const image = useRef(null);
 
     const Navigate = useNavigate();
+    let imagebox;
 
     useEffect(() => {
         if(!isLoading) {
@@ -32,19 +36,17 @@ const BasicPhotoPage = props => {
         setEditMode(!editMode);
     }
 
-    if (isLoading) {
-        return (
-            <div>Loading . .  . </div>
-        )
-    }
-
-    if( !isAuthenticated) {
-        return (
-            <div> 
-                <h2>Not logged in!</h2>
-                <p>You must be logged in to view this content.</p>
-            </div>
-        )
+    const imageClick = (event) => {
+        imagebox = (image.current.getBoundingClientRect());
+        let xpct = Math.round((event.clientX - imagebox.left) / imagebox.width * 100);
+        let ypct = Math.round((event.clientY - imagebox.top) / imagebox.height * 100);
+        setCommentLoc( {
+            xpct: xpct,
+            ypct: ypct,
+            xloc: event.clientX,
+            yloc: event.clientY
+        })
+        setActiveComment(null);
     }
 
     if(typeof(photo) === "undefined") {
@@ -52,7 +54,7 @@ const BasicPhotoPage = props => {
         setEditMode(true);
         return(
             <div className={styles.container}>
-                <img src={photo.path} alt="User submitted with comments"/>
+                <img src={photo.path} ref={image} alt="User submitted with comments" onClick={imageClick}/>
                 <button onClick={clickEdit}>{editMode ? "Save" : "Edit"}</button>
                 <form className={!editMode ? " " + styles.invisible : styles.floating }>
                     <input type="text" name="path" value={photo.path} onChange={(e) => setPhoto( {...photo, path: e.target.value} ) } />
@@ -63,13 +65,12 @@ const BasicPhotoPage = props => {
 
     return ( isAuthenticated && 
         <div className={styles.container}>
-            <img src={photo.path} alt="User submitted with comments"/>
+            <img src={photo.path} ref={image} onClick={imageClick} alt="User submitted with comments"/>
             <button onClick={clickEdit}>{editMode ? "Save" : "Edit"}</button>
             <form className={!editMode ? " " + styles.invisible : styles.floating }>
                 <input type="text" name="path" value={photo.path} onChange={(e) => setPhoto( {...photo, path: e.target.value} ) } />
             </form>
-            <button type="button" onClick={()=>setAddCommentHidden(false)}>Add Comment</button>
-            <AddComment ishidden={addcommenthidden} setIsHidden={setAddCommentHidden} photo={photo} setPhoto={setPhoto} id={id} />
+            <AddComment comment={activecomment} setActiveComment={setActiveComment} commentloc={commentloc} setCommentLoc={setCommentLoc} photo={photo} setPhoto={setPhoto} id={id} />
             <h5>Ratings</h5>
             { photo.ratings && photo.ratings.map((rating) => {
                 return (
@@ -78,8 +79,17 @@ const BasicPhotoPage = props => {
             })}
             <h5>Comments</h5>
             { photo.comments && photo.comments.map((comment) => {
+                imagebox = (image.current.getBoundingClientRect());
+                const xloc = (comment.x / 100 * imagebox.width) + imagebox.left;
+                const yloc = (comment.y / 100 * imagebox.height) + imagebox.top;
+                const onClick = () => {
+                    setActiveComment(comment._id)
+                }
                 return (
-                    <p>{`${comment.user_id} (${comment.x}, ${comment.y}) - ${comment.comment}`}</p>
+                    <>
+                        <p>{`${comment.user_id} (${comment.x}, ${comment.y}) - ${comment.comment}`}</p>
+                        <Target key={comment._id} onClick={onClick} xloc={xloc} yloc={yloc} diam={comment.diam} active={(activecomment === comment._id)} hidden={false}/>
+                    </>
                 )
             })}
             <button onClick={() => Navigate("/gallery/" + photo.gallery_id)}>Go back to gallery!</button>

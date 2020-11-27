@@ -9,7 +9,8 @@ const UserForm = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errs, setErrs] = useState({});
-
+    let pass_hash;
+    
     const newUser = (e) => {
         e.preventDefault();
         axios.post("http://localhost:8000/api/users/new", {
