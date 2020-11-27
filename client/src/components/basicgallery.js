@@ -4,6 +4,7 @@ import styles from './basicgallery.module.css';
 import { useAuth0 } from '@auth0/auth0-react';
 import auth0SecureAPI from './auth0secureapi';
 import BasicPhoto from './basicphoto';
+import { useNavigate } from '@reach/router';
 
 
 const BasicGallery = props => {
@@ -12,7 +13,8 @@ const BasicGallery = props => {
     const [ gallery, setGallery ] = useState({});
     const photoslist = gallery.photo ?? [];
     const [editMode, setEditMode ] = useState(false);
-    
+    const Navigate = useNavigate();
+
     useEffect(() => {
         if(!isLoading) {
             console.log("Retrieving galleries!");
@@ -36,8 +38,10 @@ const BasicGallery = props => {
     }
 
     
-    return (
+    return ( isAuthenticated &&
         <div className={styles.container}>
+            <h1>Welcome {user.name}</h1>
+            <button onClick={()=> Navigate("/loggedin/")}>Back to gallery list!</button>
             <h2>{gallery.gallery_name}</h2>
             <p>Authorized Users: {gallery.authorized_user_ids}</p>
             <button onClick={()=> setEditMode(!editMode)}>{editMode ? "Save" : "Edit"}</button>
@@ -57,11 +61,3 @@ const BasicGallery = props => {
 } 
 
 export default BasicGallery;
-
-/*
-<h5>{photo.path} - {photo._id}</h5>
-                        <p>Photo Count: {gallery.photo.length}</p>
-                        {photo.ratings && photo.ratings.map((rating) => {
-                            return (<p>{rating.user_id} - {rating.rating}</p>);
-                        })}
-                        */

@@ -3,13 +3,14 @@ import React from 'react';
 import styles from './basicphoto.module.css';
 
 
+
 const BasicPhoto = props => {
     const { path, _id, ratings, comments } = props.photo;
     const Navigate = useNavigate();
     
     return (
         <div className={styles.small} onClick={() => Navigate("/photos/" + _id)}>
-            <img src={path} alt="Image with comments"/>
+            <img src={path} alt="Comment-tagged"/>
             <h5>Ratings</h5>
             { ratings && ratings.map((rating) => {
                 return (
@@ -17,9 +18,9 @@ const BasicPhoto = props => {
                 )
             })}
             <h5>Comments</h5>
-            { ratings && ratings.map((rating) => {
+            { comments && comments.map((comment) => {
                 return (
-                    <p>{`${comments.user_id} (${ratings.x}, ${ratings.y}) - ${comments.comment}`}</p>
+                    <p>{`${comment.user_id} (${comment.x}, ${comment.y}) - ${comment.comment}`}</p>
                 )
             })}
         </div>

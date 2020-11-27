@@ -1,8 +1,5 @@
 const auth0SecureAPI = async (getAccessTokenSilently, endpoint, body) => {
-    console.log(body ? "POST" : "GET");
     let payload;
-    
-
     try {
         const accessToken = await getAccessTokenSilently({});
         let response;
@@ -24,7 +21,6 @@ const auth0SecureAPI = async (getAccessTokenSilently, endpoint, body) => {
             };
         }
         response = await fetch("http://localhost:8000/api/" + endpoint, payload);
-
         return response.json();
     } catch (e) {
         console.log(e.message);
