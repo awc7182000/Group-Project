@@ -1,17 +1,17 @@
 import './App.css';
-import Main from './views/Main'
+import Galleries from './views/galleries'
 import {Router} from '@reach/router'
 import Detail from './Components/Details'
 import Login from './views/Login'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import AuthRoutes from './authroutes';
 
 function App() {
   return (
     <div className="App">
       <Router>
-      <Main path="/"/>
-      <Detail path="/Detail/:id"/>
-      <Login path="/login/"/>
+        <Login path="/"/>
+        <AuthRoutes path="/*" />
       </Router>
     </div>
   );
