@@ -29,8 +29,10 @@ const AuthRoutes = props => {
         <>
             <Router>
                 <BasicGalleryList path="/loggedin"/>
-                <BasicGallery path="/gallery/:id" />
-                <BasicPhotoPage path="/photos/:id" />
+                <BasicPhotoPage path="/photos/new/:togallery" isnew={true} />
+                <BasicPhotoPage path="/photos/:id" isnew={false} />
+                <BasicGallery path="/gallery/new" isnew={true} />
+                <BasicGallery path="/gallery/:id"  isnew={false} />
             </Router>
         </>
     )

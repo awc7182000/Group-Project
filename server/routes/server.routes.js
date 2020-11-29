@@ -11,7 +11,9 @@ module.exports = app => {
   app.get("/api/photos/", PhotoController.findAllPhotos);
   app.get("/api/photos/:id", PhotoController.findOneSinglePhoto);
   app.post("/api/photos/update/:id", PhotoController.updateExistingPhoto);
-  app.post("/api/photos/new", PhotoController.createNewPhoto);
+  app.post("/api/photos/add/:togallery", PhotoController.addPhotoToGallery);
+  app.post("/api/gallery/new", PhotoController.createNewGallery);
+  app.post("/api/gallery/update/:id", PhotoController.updateExistingGallery);
   app.delete("/api/photos/delete/:id", PhotoController.deleteAnExistingPhoto);
 
   app.get("/api/photos/owner/:id",  PhotoController.findAllPhotosByOwnerID );

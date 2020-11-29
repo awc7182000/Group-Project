@@ -56,6 +56,7 @@ const BasicGalleryList = props => {
                 <p>{user.email}</p>
                 <LogOutButton />
                 <button onClick={runRetrieve}>Run retrieve again!</button>
+                <button name="addnewgallery" onClick={() => Navigate("/gallery/new")}>Add new gallery!</button>
                 { galleries && galleries.map((gallery) => {
                     return (
                         <div onClick={() => Navigate("/gallery/" + gallery._id)}>

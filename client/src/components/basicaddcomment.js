@@ -11,7 +11,9 @@ const AddComment = props => {
     const { xloc, yloc, xpct, ypct, diam } = commentloc ?? {};
 
     const saveComment = (comment) => {
-        const temp_photo = {...photo, 
+        let temp_photo;
+        if(photo.comments) {
+        temp_photo = {...photo, 
             comments: [
                 ...photo.comments, 
                 {
@@ -22,6 +24,18 @@ const AddComment = props => {
                     comment: textvalue
                 }
             ] };
+        } else {
+            temp_photo = {...photo, 
+                comments: [
+                    {
+                        user_id: user.sub,
+                        x: xpct,
+                        y: ypct,
+                        diam: diam,
+                        comment: textvalue
+                    }
+                ] };
+        }
         setPhoto(temp_photo);
         console.log("Saving photo", temp_photo);
         auth0SecureAPI(getAccessTokenSilently, "photos/update/" + id, temp_photo)

@@ -8,36 +8,39 @@ import Target from "./basictarget";
 
 const BasicPhotoPage = props => {
     const { user, isAuthenticated, isLoading, getAccessTokenSilently } = useAuth0();
-    const { id }  = props;
+    const { id, togallery, isnew }  = props;
     const [ photo, setPhoto ] = useState({});
     const [ editMode, setEditMode ] = useState(false);
     const [ commentloc, setCommentLoc ] = useState(null);
     const [ activecomment, setActiveComment ] = useState(null);
-    //const [ startcoord, setStartCoord ] = useState([0,0]);
     const [diam, setDiam ] = useState(10);
-
-    const [selection, setSelection ] = useState({
-        xloc: 0,
-        yloc: 0,
-        diam: 10,
-        hidden: true,
-    })
+    const [selection, setSelection ] = useState({ xloc: 0, yloc: 0, diam: 10, hidden: true });
+    
     const image = useRef(null);
     const imgcontainer = useRef(null);
     const Navigate = useNavigate();
+    
     let imagebox;
 
     useEffect(() => {
+        console.log("Is new:", isnew);
         if(!isLoading) {
-            auth0SecureAPI(getAccessTokenSilently, "photos/" + id)
-                .then(res => setPhoto({...res.photo[0], gallery_name: res.gallery_name, gallery_id: res._id}))
-                .catch(err => console.log(err));
+            if(isnew) {
+                setPhoto( {gallery_id: togallery} );
+                setEditMode(true);
+            } else {
+                auth0SecureAPI(getAccessTokenSilently, "photos/" + id)
+                    .then(res => setPhoto({...res.photo[0], gallery_name: res.gallery_name, gallery_id: res._id}))
+                    .catch(err => console.log(err));
+            }
         }
+        console.log("Ran use effect");
     },[isLoading]);
 
     const clickEdit = () => {
         if(editMode) {
-            auth0SecureAPI(getAccessTokenSilently, "photos/update/" + id, photo)
+            let postpath = isnew ? "add/" + togallery : "update/" + id
+            auth0SecureAPI(getAccessTokenSilently, "photos/" + postpath, photo)
                 .then(res => alert("Changes saved!"))
                 .catch(err => console.log(err));
         }
@@ -69,12 +72,7 @@ const BasicPhotoPage = props => {
                 diam: diam
             })
             setActiveComment(null);
-            setSelection({
-                xloc: 0,
-                yloc: 0,
-                diam: 10,
-                hidden: true,
-            });
+            setSelection({ xloc: 0, yloc: 0, diam: 10, hidden: true});
         }
     }
 
@@ -101,6 +99,7 @@ const BasicPhotoPage = props => {
 
     if(typeof(photo) === "undefined") {
         //new photo
+        console.log("New photo!");
         setEditMode(true);
         return(
             <div className={styles.container}>

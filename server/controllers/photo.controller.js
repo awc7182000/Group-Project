@@ -30,9 +30,20 @@ module.exports.findOneSinglePhoto = (req, res) => {
 		.catch(err => res.json({ message: "Something went wrong", error: err }));
 };
 
-module.exports.createNewPhoto = (req, res) => {
+module.exports.createNewGallery = (req, res) => {
   Photo.create(req.body)
     .then(newlyCreatedPhoto => res.json( newlyCreatedPhoto ))
+    .catch(err => res.json({ message: "Something went wrong", error: err }));
+};
+
+module.exports.addPhotoToGallery = (req, res) => {
+  Photo.findOneAndUpdate(
+      { "_id" : req.params.togallery }, 
+      { "$push" : {
+        "photo": req.body
+      }}, 
+      { new: true })
+    .then(addedPhoto => res.json( addedPhoto ))
     .catch(err => res.json({ message: "Something went wrong", error: err }));
 };
 
@@ -47,6 +58,14 @@ module.exports.updateExistingPhoto = (req, res) => {
     .catch(err => res.json({ message: "Something went wrong", error: err }));
 };
 
+module.exports.updateExistingGallery = (req, res) => {
+  Photo.findOneAndUpdate(
+      { "_id" : req.params.id }, 
+      { "$set" : req.body }, 
+      { new: true })
+    .then(updatedPhoto => res.json( updatedPhoto ))
+    .catch(err => res.json({ message: "Something went wrong", error: err }));
+};
 module.exports.deleteAnExistingPhoto = (req, res) => {
   Photo.deleteOne({ _id: req.params.id })
     .then(result => res.json(result ))
