@@ -30,7 +30,9 @@ const AuthRoutes = props => {
         <>
             <Router>
                 <Galleries path="/loggedin"/>
+                <Gallery path="/gallery/new" isnew={true} />
                 <Gallery path="/gallery/:id" />
+                <PhotoPage path="/Detail/new/:togallery" isnew={true}/>
                 <PhotoPage path="/Detail/:id" />
             </Router>
         </>

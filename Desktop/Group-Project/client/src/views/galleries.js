@@ -33,16 +33,18 @@ const Galleries = (props) => {
     return (
         <div className="Main" style={{ width: "auto" }}>
             <h1 class="UserName">{user.name}</h1>
+            <Button onClick={navigate.bind(this, '/gallery/new')}>Add gallery!</Button>
             <CardDeck>
                 {galleries && galleries.map(gallery => (
                     <Card>
                         <Card.Img variant="top" src={gallery.photo[0] && gallery.photo[0].path} />
+                        <Card.Title>{gallery.gallery_name}</Card.Title>
                         <Card.Body>
                             <Card.Title>{gallery.title}</Card.Title>
                             <p>Photos: {gallery.photo.length}</p>
                         </Card.Body>
                         <Card.Footer>
-                            <Button onClick={navigate.bind(this, '/gallery/' + gallery._id)}>Card Link</Button>
+                            <Button onClick={navigate.bind(this, '/gallery/' + gallery._id)}>View Gallery</Button>
                         </Card.Footer>
                     </Card>
                 ))}

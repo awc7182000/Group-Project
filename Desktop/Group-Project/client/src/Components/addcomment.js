@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import styles from './basicaddcomment.module.css';
+import styles from './addcomment.module.css';
 import { useAuth0 } from '@auth0/auth0-react';
 import auth0SecureAPI from '../views/auth0secureapi';
 import Target from './target';
@@ -39,8 +39,7 @@ const AddComment = props => {
         setPhoto(temp_photo);
         console.log("Saving photo", temp_photo);
         auth0SecureAPI(getAccessTokenSilently, "photos/update/" + id, temp_photo)
-        .then(res => alert("Changes saved!"))
-        .catch(err => console.log(err));
+            .catch(err => console.log(err));
         
         setCommentLoc(null);
         setTextValue("Enter text here . . . ");

@@ -6,11 +6,12 @@ import styles from './Details.module.css';
 import { useAuth0 } from '@auth0/auth0-react';
 import auth0SecureAPI from '../views/auth0secureapi';
 import { useNavigate } from '@reach/router';
-import AddComment from './basicaddcomment';
+import AddComment from './addcomment';
 import Target from "./target";
+import Button from 'react-bootstrap/Button'
 
 export default function PhotoPage(props) {
-    const { isLoading, getAccessTokenSilently } = useAuth0();
+    const { user, isLoading, getAccessTokenSilently } = useAuth0();
     const { id, togallery, isnew }  = props;
     const [ photo, setPhoto ] = useState({});
     const [ editMode, setEditMode ] = useState(false);
@@ -34,18 +35,26 @@ export default function PhotoPage(props) {
                 setEditMode(true);
             } else {
                 auth0SecureAPI(getAccessTokenSilently, "photos/" + id)
-                    .then(res => setPhoto({...res.photo[0], gallery_name: res.gallery_name, gallery_id: res._id}))
+                    .then(res => {
+                        setPhoto({...res.photo[0], gallery_name: res.gallery_name, gallery_id: res._id});
+                        for(const rating of res.photo[0].ratings) {
+                            console.log("looking at", rating.user_id)
+                            if(rating.user_id === user.sub) {
+                                setValue(rating.rating);
+                                break;
+                            }
+                        }
+                    })
                     .catch(err => console.log(err));
             }
         }
-        console.log("Ran use effect");
+        
     },[isLoading]);
 
     const clickEdit = () => {
         if(editMode) {
             let postpath = isnew ? "add/" + togallery : "update/" + id
             auth0SecureAPI(getAccessTokenSilently, "photos/" + postpath, photo)
-                .then(res => alert("Changes saved!"))
                 .catch(err => console.log(err));
         }
         setEditMode(!editMode);
@@ -87,6 +96,34 @@ export default function PhotoPage(props) {
         setActiveComment(null);
     }
 
+    const setMyRating = (newrating) => {
+        console.log(photo);
+        let found = false;
+        let temp_photo = { ...photo,
+            ratings: photo.ratings.map(rating => {
+                if(rating.user_id === user.sub) {
+                    found = true;
+                    return { 
+                        ...rating,
+                        rating: newrating
+                    }
+                } else {
+                    return rating;
+                }
+            } )
+            } 
+        if(!found) {
+            temp_photo = { ...temp_photo,
+                ratings: [ ...temp_photo.ratings, {
+                    rating: newrating,
+                    user_id: user.sub
+                } ] 
+            }
+        }
+        setPhoto(temp_photo);
+        auth0SecureAPI(getAccessTokenSilently, "photos/update/" + id, temp_photo)
+        .catch(err => console.log(err));
+    }
     return (
         <div className={styles.container}>
             <h1 class="UserName">Picture Name Goes Here</h1>
@@ -117,14 +154,16 @@ export default function PhotoPage(props) {
                         value={value}
                         onChange={(event, newValue) => {
                             setValue(newValue);
+                            setMyRating(newValue);
                         }}
                     />
                 </Box>
             </div>
             
-            <button onClick={clickEdit}>{editMode ? "Save" : "Edit"}</button>
+            <Button onClick={clickEdit}>{editMode ? "Save" : "Edit"}</Button>
             <form className={!editMode ? " " + styles.invisible : styles.floating }>
                 <input type="text" name="path" value={photo.path} onChange={(e) => setPhoto( {...photo, path: e.target.value} ) } />
+                <Button onClick={() => setEditMode(false)}>Cancel</Button>
             </form>
             <AddComment comment={activecomment} setActiveComment={setActiveComment} commentloc={commentloc} setCommentLoc={setCommentLoc} photo={photo} setPhoto={setPhoto} id={id} />
             <h5>Ratings</h5>

@@ -1,11 +1,5 @@
 .container {
     position: relative;
-    max-width: 970px;
-}
-
-.container img {
-    max-width: 100%;
-    max-height: 700px;
 }
 
 .invisible {
@@ -18,8 +12,4 @@
     border-radius: 15px;
     border: 1px solid black;
     padding: 15px;
-}
-
-.floating input {
-    width: 900px;
 }
