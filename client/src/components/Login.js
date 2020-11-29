@@ -11,8 +11,8 @@ const Login = () => {
     const { logout } = useAuth0();
 
     return (
-        <div>
-            <button type='button' onClick={() => loginWithRedirect()}>Login</button>
+        <div className="container">
+            <button type='button' onClick={() => loginWithRedirect()} className="btn btn-primary" style={{borderRadius: "7px"}}>Login</button>
             <button type='button' onClick={() => logout()}>Logout</button>
             <Link to="/register">Not a member? Register</Link>              
         </div>

@@ -7,7 +7,7 @@ const UserForm = () => {
     const [last_name, setLast_Name] = useState("");
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [pass_hash, setPass_Hash] = useState("");
     const [errs, setErrs] = useState({});
 
     const newUser = (e) => {
@@ -57,8 +57,8 @@ const UserForm = () => {
                     </div>
                     <div className="form-group">
                         <label for="password">Password:</label>
-                        {errs.password ? <span className="text-danger small">{errs.password.message}</span> : null}
-                        <input type="text" name="password" onChange= { e => setPassword(e.target.value)} value={password} className="form-control"/>
+                        {errs.password ? <span className="text-danger small">{errs.pass_hash.message}</span> : null}
+                        <input type="text" name="password" onChange= { e => setPass_Hash(e.target.value)} value={pass_hash} className="form-control"/>
                     </div>
                     <button type="sumbit" className="btn btn-primary" style={{marginBottom: '10px'}}>Create User</button>
                 </form>
