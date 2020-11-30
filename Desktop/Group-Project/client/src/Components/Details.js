@@ -65,11 +65,13 @@ export default function PhotoPage(props) {
             imagebox = (image.current.getBoundingClientRect());
             let xpct = Math.round((selection.xloc - imagebox.left + window.pageXOffset) / imagebox.width * 100);
             let ypct = Math.round((selection.yloc - imagebox.top + window.pageYOffset) / imagebox.height * 100);
+            let diampct = diam / imagebox.width * 100;
             setCommentLoc( {
                 ...selection,
                 xpct: xpct,
                 ypct: ypct,
-                diam: diam
+                diam: diam,
+                diampct: diampct
             })
             setActiveComment(null);
             setSelection({ xloc: 0, yloc: 0, diam: 10, hidden: true});
@@ -134,6 +136,7 @@ export default function PhotoPage(props) {
                     imagebox = (image.current.getBoundingClientRect());
                     const xloc = (comment.x / 100 * imagebox.width) + imagebox.left + window.pageXOffset;
                     const yloc = (comment.y / 100 * imagebox.height) + imagebox.top + window.pageYOffset;
+                    const showdiam = (comment.diam / 100 * imagebox.width);
                     const onClick = () => {
                         setActiveComment(comment._id)
                     }
@@ -142,7 +145,7 @@ export default function PhotoPage(props) {
                             <Target key={comment._id} onClick={(event) => {
                                 event.stopPropagation();
                                 onClick();
-                                }} xloc={xloc} yloc={yloc} diam={comment.diam} active={(activecomment === comment._id)} hidden={false}/>
+                                }} xloc={xloc} yloc={yloc} diam={showdiam} active={(activecomment === comment._id)} hidden={false}/>
                         </>
                     )
                 })}

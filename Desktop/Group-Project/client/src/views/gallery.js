@@ -1,4 +1,4 @@
-import { Link, navigate } from '@reach/router'
+import {  navigate } from '@reach/router'
 import Card from 'react-bootstrap/Card'
 import React, { useState, useEffect } from 'react'
 import ListGroup from 'react-bootstrap/ListGroup'
@@ -9,8 +9,8 @@ import auth0SecureAPI from './auth0secureapi';
 import styles from './gallery.module.css';
 
 export default (props) => {
-    const { isLoading, user,getAccessTokenSilently } = useAuth0();
-    const [gallery, setGallery] = useState([]);
+    const { isLoading, user, getAccessTokenSilently } = useAuth0();
+    const [gallery, setGallery] = useState({});
     const { id, isnew } = props;
     const [ editMode, setEditMode ] = useState(false);
 
@@ -35,22 +35,23 @@ export default (props) => {
                 authorized_user_ids: gallery.authorized_user_ids,
                 owner_id: isnew ? "123" : gallery.owner_id
             }
-            console.log(gallery_update);
             auth0SecureAPI(getAccessTokenSilently, "gallery/" + postpath, gallery_update)
                 .catch(err => console.log(err));
         }
         setEditMode(!editMode);
     }
 
+    //let imagebox;
+
     return (
         <div className="Main" style={{ width: "auto" }}>
-            <h1 class="UserName">User: {user.name}</h1>
+            <h1 className="UserName">User: {user.name}</h1>
             <h3>Gallery: {gallery.gallery_name}</h3>
             <Button onClick={navigate.bind(this, '/Detail/new/' + gallery._id)}>Add new photo!</Button>
             <Button onClick={navigate.bind(this, '/loggedin')}>Back to Galleries</Button>
             <Button onClick={clickEdit}>{editMode ? "Save" : "Edit"}</Button>
             <form className={ editMode ? styles.floating : styles.invisible }>
-                <input type="text" name="name" value={gallery.gallery_name} onChange={(e) => setGallery({...gallery, gallery_name: e.target.value})}/>
+                <input type="text" name="name" value={gallery.gallery_name ?? "Loading . . . "} onChange={(e) => setGallery({...gallery, gallery_name: e.target.value})}/>
                 {/*<label> Authorized Users (separate by commas): </label>
                 <input type="text" name="name" value={gallery.authorized_user_ids} onChange={(e) => setGallery({...gallery, authorized_user_ids: e.target.value.toString().split(",")})}/>
                 */}
@@ -58,15 +59,16 @@ export default (props) => {
             </form>
             <CardDeck>
                 {gallery.photo && gallery.photo.length && gallery.photo.map(photo => (
-                    <Card>
+                    <Card key={photo._id}>
                         <Card.Img variant="top" src={photo.path} />
                         <Card.Body>
                             <Card.Title>Title Goes Here</Card.Title>
-                            {photo.comments.length && photo.comments.map(comment => (
-                                <ListGroup variant="flush">
-                                    <ListGroup.Item>-{comment.comment}</ListGroup.Item>
-                                </ListGroup>
-                            ))}
+                            <ListGroup variant="flush">
+                                {photo.comments.length && photo.comments.map(comment => (
+                                    <ListGroup.Item key={comment._id}>-{comment.comment}</ListGroup.Item>
+                                
+                                ))}
+                            </ListGroup>
                         </Card.Body>
                         <Card.Footer>
                             <Button onClick={navigate.bind(this, '/Detail/' + photo._id)}>View Photo</Button>

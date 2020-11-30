@@ -8,11 +8,12 @@ import { Auth0Provider } from '@auth0/auth0-react';
 ReactDOM.render(
   <React.StrictMode>
     <Auth0Provider 
-        domain="dev-08umzn2o.us.auth0.com" 
-        clientId="76OKk6yoIt4f4W4ChvVmYytfgRcZqI1I"
+        domain="dev-ikbjrful.us.auth0.com" 
+        clientId="3rDcBgHYzrw6x2tdXuVTNwR07RwwkVC8"
         redirectUri={ "http://localhost:3000/loggedin/"}
-        audience="https://localhost:8000/api"
-        scope="read:any">
+        //audience="https://localhost:8000/api"
+        //scope="read:any">
+        >
         <App />
       </Auth0Provider>
   </React.StrictMode>,

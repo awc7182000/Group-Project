@@ -8,7 +8,7 @@ const AddComment = props => {
     const { id, photo, setPhoto, commentloc, setCommentLoc, setActiveComment } = props;
     const { user, getAccessTokenSilently } = useAuth0();
     const [ textvalue, setTextValue ] = useState("Enter text here . . . ")
-    const { xloc, yloc, xpct, ypct, diam } = commentloc ?? {};
+    const { xloc, yloc, xpct, ypct, diam, diampct } = commentloc ?? {};
 
     const saveComment = (comment) => {
         let temp_photo;
@@ -20,7 +20,7 @@ const AddComment = props => {
                     user_id: user.sub,
                     x: xpct,
                     y: ypct,
-                    diam: diam,
+                    diam: diampct,
                     comment: textvalue
                 }
             ] };
@@ -31,7 +31,7 @@ const AddComment = props => {
                         user_id: user.sub,
                         x: xpct,
                         y: ypct,
-                        diam: diam,
+                        diam: diampct,
                         comment: textvalue
                     }
                 ] };
