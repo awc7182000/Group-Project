@@ -11,9 +11,8 @@ ReactDOM.render(
         domain="dev-ikbjrful.us.auth0.com" 
         clientId="3rDcBgHYzrw6x2tdXuVTNwR07RwwkVC8"
         redirectUri={ "http://localhost:3000/loggedin/"}
-        //audience="https://localhost:8000/api"
-        //scope="read:any">
-        >
+        audience="http://localhost:8000/api/"
+        scope="read:any">
         <App />
       </Auth0Provider>
   </React.StrictMode>,

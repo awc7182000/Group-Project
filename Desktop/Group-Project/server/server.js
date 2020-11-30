@@ -5,8 +5,13 @@ const cors = require('cors');
 // This will fire our mongoose.connect statement to initialize our database connection
 require("./config/mongoose.config");
 
-app.use(cors());
+const corsOptions = {
+    origin: 'http://localhost:3000'
+};
+app.use(cors(corsOptions));
+
 app.use(express.json(), express.urlencoded({ extended: true }));
+
 
 // This is where we import the users routes function from our user.routes.js file
 const AllMyUserRoutes = require("./routes/server.routes");
