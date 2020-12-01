@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import Login from './views/Login';
+import Login from './views/login';
 import { Router } from "@reach/router";
 import Galleries from './views/galleries';
 import Gallery from "./views/gallery";
