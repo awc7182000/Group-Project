@@ -36,7 +36,12 @@ export default (props) => {
                 owner_id: isnew ? "123" : gallery.owner_id
             }
             auth0SecureAPI(getAccessTokenSilently, "gallery/" + postpath, gallery_update)
+                .then(res=> setGallery(res))
                 .catch(err => console.log(err));
+            
+                //auth0SecureAPI(getAccessTokenSilently, "photos/gallery/" + id)
+            //    .then(res => setGallery(res[0]))
+            //    .catch(err => console.log(err));  
         }
         setEditMode(!editMode);
     }

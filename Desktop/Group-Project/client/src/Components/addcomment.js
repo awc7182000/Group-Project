@@ -5,7 +5,7 @@ import auth0SecureAPI from '../views/auth0secureapi';
 import Target from './target';
 
 const AddComment = props => {
-    const { id, photo, setPhoto, commentloc, setCommentLoc, setActiveComment } = props;
+    const { photo, setPhoto, commentloc, setCommentLoc, setActiveComment } = props;
     const { user, getAccessTokenSilently } = useAuth0();
     const [ textvalue, setTextValue ] = useState("Enter text here . . . ")
     const { xloc, yloc, xpct, ypct, diam, diampct } = commentloc ?? {};
@@ -18,6 +18,7 @@ const AddComment = props => {
                 ...photo.comments, 
                 {
                     user_id: user.sub,
+                    user_name: user.name,
                     x: xpct,
                     y: ypct,
                     diam: diampct,
@@ -29,6 +30,7 @@ const AddComment = props => {
                 comments: [
                     {
                         user_id: user.sub,
+                        user_name: user.name,
                         x: xpct,
                         y: ypct,
                         diam: diampct,
@@ -37,10 +39,10 @@ const AddComment = props => {
                 ] };
         }
         setPhoto(temp_photo);
-        console.log("Saving photo", temp_photo);
-        auth0SecureAPI(getAccessTokenSilently, "photos/update/" + id, temp_photo)
+        console.log("Saving photo", temp_photo, "To path: ", photo._id);
+        auth0SecureAPI(getAccessTokenSilently, "photos/update/" + photo._id, temp_photo)
+            .then(res => setPhoto(res.photo[0]))
             .catch(err => console.log(err));
-        
         setCommentLoc(null);
         setTextValue("Enter text here . . . ");
         setActiveComment(null);

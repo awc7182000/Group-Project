@@ -13,7 +13,8 @@
 
 .card{
   margin: 3%;
-  width: 400px;
+  max-width: 450px;
+  min-width: 250px;
 }
 
 .Main{

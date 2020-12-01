@@ -7,11 +7,13 @@ const PhotoSchema = new mongoose.Schema({
 	photo: [ {
 		path: String,
 		ratings: [ {
-			user_id: String,
+            user_id: String,
+            user_name: String,
 			rating: Number
 		} ],
 		comments: [ {
-			user_id: String,
+            user_id: String,
+            user_name: String,
 			x: Number,
 			y: Number,
 			diam: Number,

@@ -23,3 +23,12 @@
 .floating input {
     width: 900px;
 }
+
+.active {
+    color: red;
+    font-weight: bold;
+}
+
+.regular {
+    color: black;
+}

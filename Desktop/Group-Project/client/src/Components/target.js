@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Target = props => {
-    const { xloc, yloc, diam, active, hidden = false, onClick } = props;
+    const { xloc, yloc, diam, active, hidden = false, onClick, text="" } = props;
     let showdiam = Math.max(diam, 10);
     if(typeof(showdiam)!== "number") { showdiam = 10};
 
@@ -18,10 +18,11 @@ const Target = props => {
             borderRadius: showdiam + "px",
             width: showdiam - 3 + "px",
             height: showdiam - 3 + "px",
-            padding: "0px",
-            margin: "0px"
+            padding: diam / 8 + "px",
+            margin: "0px",
+            color: "white",
         }} onClick={onClickPassed} onMouseDown={(e) => e.stopPropagation()}>
-
+            {text}
         </div>
     )
 }
